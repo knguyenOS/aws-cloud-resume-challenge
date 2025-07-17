@@ -40,6 +40,7 @@ section {
 section h2 {
   color: #222;
   border-bottom: 2px solid #ddd;
+  margin-bottom: 10px;
 }
 
 ul {
@@ -52,7 +53,7 @@ ul li {
   margin-bottom: 4px; /* was likely around 8px before */
 }
 
-.title-date {
+.title {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
@@ -60,14 +61,21 @@ ul li {
   margin-bottom: 3px;
 }
 
-.title-date .date {
+.title .location {
   font-style: italic;
   color: #666;
   white-space: nowrap;
   text-align: right;
 }
 
-.title-date > div {
+.title > .date {
+  font-style: italic;
+  color: #666;
+  white-space: nowrap;
+  text-align: right;
+}
+
+.title > div {
   margin: 0;
   padding: 0;
   line-height: 1.2;
