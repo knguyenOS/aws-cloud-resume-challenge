@@ -64,6 +64,7 @@ ul li {
   font-style: italic;
   color: #666;
   white-space: nowrap;
+  text-align: right;
 }
 
 .title-date > div {
