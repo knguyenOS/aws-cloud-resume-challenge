@@ -1,0 +1,90 @@
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  background-color: #f9f9f9;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 800px;
+  margin: 40px auto;
+  background: white;
+  padding: 30px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+header {
+  text-align: center;
+  margin-bottom: 0px;
+}
+
+header h1 {
+  margin-bottom: 5px;
+}
+
+a {
+  color: #007acc;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+section {
+  margin-bottom: 5px;
+}
+
+section h2 {
+  color: #222;
+  border-bottom: 2px solid #ddd;
+}
+
+ul {
+  margin-top: 0.3em;
+  margin-bottom: 0.8em;
+  padding-left: 20px;
+}
+
+ul li {
+  margin-bottom: 4px; /* was likely around 8px before */
+}
+
+.title-date {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  margin-bottom: 3px;
+}
+
+.title-date .date {
+  font-style: italic;
+  color: #666;
+  white-space: nowrap;
+}
+
+.title-date > div {
+  margin: 0;
+  padding: 0;
+  line-height: 1.2;
+}
+
+p {
+  margin-top: 0.3em;
+  margin-bottom: 0.6em;
+}
+
+footer {
+    border-top: 2px solid #ddd;
+    padding-top: 10px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+footer p {
+
+  margin: 0px;
+}
