@@ -8,7 +8,7 @@ The [Cloud Resume Challenge](https://cloudresumechallenge.dev/) is a hands-on pr
 
 
 # Table of Contents
-- [Project Overview]
+- [Cloud Resume Challenge](#aws-cloud-resume-challenge)
   - 
 
 ## Benefits of the challenge
@@ -22,48 +22,56 @@ The [Cloud Resume Challenge](https://cloudresumechallenge.dev/) is a hands-on pr
 First challenge is to obtain a certification which ensures you understand cloud fundamentals before continuing. For this project, I worked towards AWS services and so took the [AWS Cloud Practitioner](https://aws.amazon.com/certification/certified-cloud-practitioner/) Certification. [Here](https://www.credly.com/badges/81a987db-7829-4954-88d2-c5cf20330e22/public_url) is my credly badge
 
 ### Stage 2 — Front-End Resume Website
+Build the visual representation of resume using plain HTML, CSS and JavaScript (which gets more important at stage 2).
+
+#### 2.1 HTML
 The resume should be created using HTML. It does not have to be pretty or contain sublime styling, since the challenge is not about perfect styling and responsive web design
 
-CSS – Style the resume using CSS.
+#### 2.2 CSS
+Style the resume using CSS.
 
+#### 2.3 JavaScript
+The resume should include simple JS script for counting number of visitors.
 
+#### 2.4 S3
+Store the website files into an S3 bucket and make it available to access
 
-Static Website – Deploy the webpage as an S3 Static Website.
-
-The resume page is accessible only via CloudFront Distribution.
+#### 2.5 CloudFront
+Make the page only accaccessible only via CloudFront Distribution.
 The S3 Bucket serving the static content has all all public access blocked - OAC is configured with said S3 bucket as the origin with the bucket only allowing requests from CloudFront OAC.
-The requests from HTTP are redirected to HTTPS.
-DNS – Point a custom domain (via Route 53 or another provider) to the CloudFront distribution.
 
-### Stage 3 — Front-End Interactivity
-Add a dynamic visitor counter to your resume.
-JavaScript – Add client-side code to display the visitor count.
+#### 2.6 Route53 (DNS)
+Purchasing the domain. Point a custom domain (via Route 53 or another provider) to the CloudFront distribution.
 
-### Stage 4 — Back-End & Database
-Create the architecture behind the visitor counter.
+#### 2.7 AWS Certificate Manager (ACM)
+In order to serve HTTPS traffic, we must register a certificate for our domain which then attaches to our CloudFront distribution. The requests from HTTP are redirected to HTTPS.
+
+### Stage 3 — Back-End & Database
+This section is about extending local visitor counter (written in JavaScript) to a full API which saves the values in AWS DynamoDB database.
+
+#### 3.1 Database
+Use of DynamoDB
+The visitor counter is saved and retrieved from a single Table in AWS DynamoDB.
 Database – Use DynamoDB to store and update the visitor counter.
 
-API – Build an API using API Gateway + Lambda to communicate with DynamoDB.
+#### 3.2 API + Lambda
 Python – Write the Lambda function in Python using boto3.
 Tests – Write tests for your Python Lambda code.
+
+### Stage 4 — Frontend & Backend integration
+This section is about embedding the value coming from DynamoDB through AWS Lambda into the JavaScript code, making the page dynamically count and display the visitors number.
+
+#### 4.1 Dynamic counter value
 I had it where vistor counter was updated via fetching a lambda function which updated and returned the counter
 
-### Stage 5 — Infrastructure as Code
-
-Automate creation of the backend resources.
-
-Infrastructure as Code – Build and deploy all backend resources using AWS SAM or Terraform.
-
-### Stage 6 — CI/CD Automation
+### Stage 5 — CI/CD Automation
 Automate deployments for both backend and frontend.
 Source Control – Store backend code in GitHub.
 
-CI/CD (Backend) – Use GitHub Actions to test and deploy SAM/Terraform changes automatically.
-
+#### 5.1 CodePipeline CI/CD (Backend) – Use GitHub Actions to test and deploy SAM/Terraform changes automatically.
 CI/CD (Frontend) – Use GitHub Actions to auto-update the S3 website (and invalidate CloudFront cache when needed).
 
 ### Stage 7 — Reflection & Documentation
-
 Showcase what you learned.
 
 This journey was filled with challenges, but the Cloud Resume Challenge helped me transition from AWS certifications to hands-on experience in the cloud industry.
