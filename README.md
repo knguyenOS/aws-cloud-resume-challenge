@@ -8,8 +8,28 @@ The [Cloud Resume Challenge](https://cloudresumechallenge.dev/) is a hands-on pr
 
 
 # Table of Contents
-- [Cloud Resume Challenge](#aws-cloud-resume-challenge)
-  - 
+- [AWS Cloud Resume Challenge](#aws-cloud-resume-challenge)
+  - [Cloud Resume Hosting Project](#cloud-resume-hosting-project)
+  - [Benefits of the Challenge](#benefits-of-the-challenge)
+  - [Challenge Stages](#challenge-stages)
+    - [Stage 1 — Foundations](#stage-1--foundations)
+    - [Stage 2 — Front-End Resume Website](#stage-2--front-end-resume-website)
+      - [2.1 HTML](#21-html)
+      - [2.2 CSS](#22-css)
+      - [2.3 JavaScript](#23-javascript)
+      - [2.4 S3](#24-s3)
+      - [2.5 CloudFront](#25-cloudfront)
+      - [2.6 Route53 (DNS)](#26-route53-dns)
+      - [2.7 AWS Certificate Manager (ACM)](#27-aws-certificate-manager-acm)
+    - [Stage 3 — Back-End & Database](#stage-3--back-end--database)
+      - [3.1 Database](#31-database)
+      - [3.2 API + Lambda](#32-api--lambda)
+    - [Stage 4 — Frontend & Backend Integration](#stage-4--frontend--backend-integration)
+      - [4.1 Dynamic Counter Value](#41-dynamic-counter-value)
+    - [Stage 5 — CI/CD Automation](#stage-5--cicd-automation)
+      - [5.1 CodePipeline CI/CD (Backend)](#51-codepipeline-cicd-backend)
+    - [Stage 6 — Reflection & Documentation](#stage-6--reflection--documentation)
+
 
 ## Benefits of the challenge
 - Provides practical experience designing and deploying a full end-to-end cloud project using key AWS services
@@ -68,10 +88,11 @@ I had it where vistor counter was updated via fetching a lambda function which u
 Automate deployments for both backend and frontend.
 Source Control – Store backend code in GitHub.
 
-#### 5.1 CodePipeline CI/CD (Backend) – Use GitHub Actions to test and deploy SAM/Terraform changes automatically.
+#### 5.1 CodePipeline CI/CD (Backend)
+Use GitHub Actions to test and deploy SAM/Terraform changes automatically.
 CI/CD (Frontend) – Use GitHub Actions to auto-update the S3 website (and invalidate CloudFront cache when needed).
 
-### Stage 7 — Reflection & Documentation
+### Stage 6 — Reflection & Documentation
 Showcase what you learned.
 
 This journey was filled with challenges, but the Cloud Resume Challenge helped me transition from AWS certifications to hands-on experience in the cloud industry.
