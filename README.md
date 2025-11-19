@@ -14,13 +14,12 @@ The [Cloud Resume Challenge](https://cloudresumechallenge.dev/) is a hands-on pr
   - [Challenge Stages](#challenge-stages)
     - [Stage 1 — Foundations](#stage-1--foundations)
     - [Stage 2 — Front-End Resume Website](#stage-2--front-end-resume-website)
-      - [2.1 HTML](#21-html)
-      - [2.2 CSS](#22-css)
-      - [2.3 JavaScript](#23-javascript)
-      - [2.4 S3](#24-s3)
-      - [2.5 CloudFront](#25-cloudfront)
-      - [2.6 Route53 (DNS)](#26-route53-dns)
-      - [2.7 AWS Certificate Manager (ACM)](#27-aws-certificate-manager-acm)
+      - [2.1 HTML/CSS](#21-htmlcss)
+      - [2.2 JavaScript](#22-javascript)
+      - [2.3 S3](#23-s3)
+      - [2.4 CloudFront](#24-cloudfront)
+      - [2.5 Route53 (DNS)](#25-route53-dns)
+      - [2.6 AWS Certificate Manager (ACM)](#26-aws-certificate-manager-acm)
     - [Stage 3 — Back-End & Database](#stage-3--back-end--database)
       - [3.1 Database](#31-database)
       - [3.2 API + Lambda](#32-api--lambda)
@@ -39,31 +38,29 @@ The [Cloud Resume Challenge](https://cloudresumechallenge.dev/) is a hands-on pr
 
 ## Challenge Stages
 ### Stage 1 — Foundations
-First challenge is to obtain a certification which ensures you understand cloud fundamentals before continuing. For this project, I worked towards AWS services and so took the [AWS Cloud Practitioner](https://aws.amazon.com/certification/certified-cloud-practitioner/) Certification. [Here](https://www.credly.com/badges/81a987db-7829-4954-88d2-c5cf20330e22/public_url) is my credly badge
+First challenge is to obtain a certification which ensures you understand cloud fundamentals before continuing. For this project, I worked towards AWS services and so took the [AWS Cloud Practitioner](https://aws.amazon.com/certification/certified-cloud-practitioner/) Certification. [Here](https://www.credly.com/badges/81a987db-7829-4954-88d2-c5cf20330e22/public_url) is my credly badge.
+![Certification]()
 
 ### Stage 2 — Front-End Resume Website
 Build the visual representation of resume using plain HTML, CSS and JavaScript (which gets more important at stage 2).
 
-#### 2.1 HTML
-The resume should be created using HTML. It does not have to be pretty or contain sublime styling, since the challenge is not about perfect styling and responsive web design
+#### 2.1 HTML/CSS
+The resume should be created using HTML. It does not have to be pretty or contain sublime styling, since the challenge is not about perfect styling and responsive web design. I used a combination of a resume template as well as generative AI to do most of the designa and formatting to quickly get the layout structured in the way I want. Always be sure to style the website with some basics elements and design principles so the resume is shown professionally.
 
-#### 2.2 CSS
-Style the resume using CSS.
-
-#### 2.3 JavaScript
+#### 2.2 JavaScript
 The resume should include simple JS script for counting number of visitors.
 
-#### 2.4 S3
-Store the website files into an S3 bucket and make it available to access
+#### 2.3 S3
+After completing the website, I stored the files into an S3 bucket and made it available to access. Amazon S3 allows you to host static websites by storing your HTML, CSS, JavaScript, and media files in a bucket. To make the site publicly accessible, you configure the bucket for public access, add a bucket policy granting read permissions, and enable static website hosting with an index document. Once set up, your website is accessible via the S3 bucket’s website endpoint.
 
-#### 2.5 CloudFront
-Make the page only accaccessible only via CloudFront Distribution.
+#### 2.4 CloudFront
+Make the page only accaccessible only via CloudFront Distribution. Use a CloudFront distribution to serve your content from the S3 bucket. CloudFront provides a global CDN, performance benefits, and the ability to use HTTPS.
 The S3 Bucket serving the static content has all all public access blocked - OAC is configured with said S3 bucket as the origin with the bucket only allowing requests from CloudFront OAC.
 
-#### 2.6 Route53 (DNS)
+#### 2.5 Route53 (DNS)
 Purchasing the domain. Point a custom domain (via Route 53 or another provider) to the CloudFront distribution.
 
-#### 2.7 AWS Certificate Manager (ACM)
+#### 2.6 AWS Certificate Manager (ACM)
 In order to serve HTTPS traffic, we must register a certificate for our domain which then attaches to our CloudFront distribution. The requests from HTTP are redirected to HTTPS.
 
 ### Stage 3 — Back-End & Database
