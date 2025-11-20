@@ -54,7 +54,9 @@ JavaScript is used to add minimal interactivity to an otherwise static website, 
 After completing the website, I stored the files into an S3 bucket which has the ability to host static websites. To make the site publicly accessible, I configure the bucket for public access, added a bucket policy granting read permissions, and enable static website hosting with an index document. Once set up, I was able to access the website via the S3 bucket’s website endpoint.
 
 #### 2.4 AWS CloudFront
-While hosting a static resume website directly from S3 works, it’s considered less secure as it lacks HTTPS, rovides no layer for protection, and allows outsiders direct access. Instead, we can use CloudFront with Origin Access Control (OAC) to make the page only accessible only via CloudFront Distribution link. This allows our S3 to be kept private and secure. This ensures all traffic is routed through CloudFront, where HTTPS is enabled by default. CloudFront generates a unique domain such as d123abcd89ef0.cloudfront.net, which can later be replaced with a more human-friendly custom domain name
+While hosting a static resume website directly from S3 works, it’s considered less secure as it lacks HTTPS, rovides no layer for protection, and allows outsiders direct access. Instead, we can use CloudFront with Origin Access Control (OAC) to make the page only accessible only via CloudFront Distribution link. This allows our S3 to be kept private and secure. This ensures all traffic is routed through CloudFront, where HTTPS is enabled by default. 
+
+CloudFront generates a unique domain such as ```d123abcd89ef0.cloudfront.net```, which can later be replaced with a more human-friendly custom domain name
 
 #### 2.5 AWS Route53 (DNS) & AWS Certificate Manager (ACM)
 To make the resume website accessible through a user-friendly custom domain, I registered the domain through Route 53 and pointed it to the CloudFront distribution using DNS records. I then used AWS Certificate Manager to issue an SSL/TLS certificate for my domain, enabling secure HTTPS communication. After attaching the certificate to CloudFront, the website could be accessed securely using the custom domain. This completes the front-end hosting setup with proper DNS and encryption.
@@ -78,11 +80,10 @@ This section is about embedding the value coming from DynamoDB through AWS Lambd
 I had it where vistor counter was updated via fetching a lambda function which updated and returned the counter
 
 ### Stage 5 — CI/CD Automation
-Automate deployments for both backend and frontend.
-Source Control – Store backend code in GitHub.
+Automate deployments for both backend and frontend. Source Control – Store backend code in GitHub.
 
 #### 5.1 CodePipeline CI/CD (Backend)
-Use GitHub Actions to test and deploy SAM/Terraform changes automatically.
+Use GitHub Actions to test and deploy changes automatically.
 CI/CD (Frontend) – Use GitHub Actions to auto-update the S3 website (and invalidate CloudFront cache when needed).
 
 ### Stage 6 — Reflection & Documentation
