@@ -45,23 +45,19 @@ First challenge is to obtain a certification which ensures you understand cloud 
 Build the visual representation of resume using plain HTML, CSS and JavaScript (which gets more important at stage 2).
 
 #### 2.1 HTML/CSS
-The resume should be created using HTML. It does not have to be pretty or contain sublime styling, since the challenge is not about perfect styling and responsive web design. I used a combination of a resume template as well as generative AI to do most of the designa and formatting to quickly get the layout structured in the way I want. Always be sure to style the website with some basics elements and design principles so the resume is shown professionally.
+The resume website is built using HTML to structure the content and CSS to control the visual presentation. Although the Cloud Resume Challenge does not focus on perfect UI/UX, the site should still look polished and professional. I used a combination of a simple resume template and generative AI assistance to refine the layout, styling, and readability.
 
 #### 2.2 JavaScript
-The resume should include simple JS script for counting number of visitors.
+JavaScript is used to add minimal interactivity to an otherwise static website, specifically for implementing the visitor counter feature. A small script sends a request to the backend API to retrieve and update the number of views stored in DynamoDB. This demonstrates how the front-end can interact with AWS services using asynchronous HTTP calls. The updated count is then displayed directly on the webpage.
 
-#### 2.3 S3
-After completing the website, I stored the files into an S3 bucket and made it available to access. Amazon S3 allows you to host static websites by storing your HTML, CSS, JavaScript, and media files in a bucket. To make the site publicly accessible, you configure the bucket for public access, add a bucket policy granting read permissions, and enable static website hosting with an index document. Once set up, your website is accessible via the S3 bucket’s website endpoint.
+#### 2.3 AWS S3 (simple storage service)
+After completing the website, I stored the files into an S3 bucket which has the ability to host static websites. To make the site publicly accessible, I configure the bucket for public access, added a bucket policy granting read permissions, and enable static website hosting with an index document. Once set up, I was able to access the website via the S3 bucket’s website endpoint.
 
-#### 2.4 CloudFront
-Make the page only accaccessible only via CloudFront Distribution. Use a CloudFront distribution to serve your content from the S3 bucket. CloudFront provides a global CDN, performance benefits, and the ability to use HTTPS.
-The S3 Bucket serving the static content has all all public access blocked - OAC is configured with said S3 bucket as the origin with the bucket only allowing requests from CloudFront OAC.
+#### 2.4 AWS CloudFront
+While hosting a static resume website directly from S3 works, it’s considered less secure as it lacks HTTPS, rovides no layer for protection, and allows outsiders direct access. Instead, we can use CloudFront with Origin Access Control (OAC) to make the page only accessible only via CloudFront Distribution link. This allows our S3 to be kept private and secure. This ensures all traffic is routed through CloudFront, where HTTPS is enabled by default. CloudFront generates a unique domain such as d123abcd89ef0.cloudfront.net, which can later be replaced with a more human-friendly custom domain name
 
-#### 2.5 Route53 (DNS)
-Purchasing the domain. Point a custom domain (via Route 53 or another provider) to the CloudFront distribution.
-
-#### 2.6 AWS Certificate Manager (ACM)
-In order to serve HTTPS traffic, we must register a certificate for our domain which then attaches to our CloudFront distribution. The requests from HTTP are redirected to HTTPS.
+#### 2.5 AWS Route53 (DNS) & AWS Certificate Manager (ACM)
+To make the resume website accessible through a user-friendly custom domain, I registered the domain through Route 53 and pointed it to the CloudFront distribution using DNS records. I then used AWS Certificate Manager to issue an SSL/TLS certificate for my domain, enabling secure HTTPS communication. After attaching the certificate to CloudFront, the website could be accessed securely using the custom domain. This completes the front-end hosting setup with proper DNS and encryption.
 
 ### Stage 3 — Back-End & Database
 This section is about extending local visitor counter (written in JavaScript) to a full API which saves the values in AWS DynamoDB database.
