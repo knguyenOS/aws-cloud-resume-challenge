@@ -65,28 +65,22 @@ To make the resume website accessible through a user-friendly custom domain, I r
 This section is about extending local visitor counter (written in JavaScript) to a full API which saves the values in AWS DynamoDB database.
 
 #### 3.1 Database
-Use of DynamoDB
-The visitor counter is saved and retrieved from a single Table in AWS DynamoDB.
-Database – Use DynamoDB to store and update the visitor counter.
+For the database layer, I implemented Amazon DynamoDB as a highly scalable NoSQL data store to track visitor counts reliably. I created a single table with a partition key representing the counter ID, which allowed for simple lookups and atomic updates. The Lambda function uses DynamoDB’s UpdateItem operation with an increment expression so the counter value is updated safely even under concurrent requests. This serverless design eliminates the need for managing servers while ensuring low latency and high availability.
 
 #### 3.2 API + Lambda
-Python – Write the Lambda function in Python using boto3.
-Tests – Write tests for your Python Lambda code.
+The API layer was built using AWS Lambda with Python and the boto3 SDK. The Lambda function handles two responsibilities: incrementing the counter in DynamoDB and returning the updated value to the caller. The function is then exposed through API Gateway so the frontend can call it securely.
 
 ### Stage 4 — Frontend & Backend integration
-This section is about embedding the value coming from DynamoDB through AWS Lambda into the JavaScript code, making the page dynamically count and display the visitors number.
+This stage brings the backend logic into the user interface, enabling real-time dynamic updates to the resume website.
 
 #### 4.1 Dynamic counter value
-I had it where vistor counter was updated via fetching a lambda function which updated and returned the counter
+The frontend JavaScript was modified to fetch the visitor count directly from the Lambda-powered API each time the website loads. Using fetch(), the script sends an HTTP request to the API Gateway endpoint, triggers the Lambda function, and receives the updated count from DynamoDB. The number is then injected into the HTML DOM, allowing visitors to instantly see the real-time total.
 
 ### Stage 5 — CI/CD Automation
-Automate deployments for both backend and frontend. Source Control – Store backend code in GitHub.
+This stage automates deployments for both backend and frontend, eliminating manual uploads and ensuring consistent, repeatable updates.
 
 #### 5.1 CodePipeline CI/CD (Backend)
-Use GitHub Actions to test and deploy changes automatically.
-CI/CD (Frontend) – Use GitHub Actions to auto-update the S3 website (and invalidate CloudFront cache when needed).
+For the backend, I configured AWS CodePipeline to automatically detect changes pushed to GitHub using the AWS Connector for GitHub. This integration allows CodePipeline to monitor the repository and trigger builds whenever new commits are pushed. CodeBuild handles running the tests and packaging the Lambda code, while the final stage deploys the updated function automatically. This workflow ensures that every backend update is tested, validated, and deployed with no manual intervention, improving reliability and speeding up development.
 
 ### Stage 6 — Reflection & Documentation
-Showcase what you learned.
-
-This journey was filled with challenges, but the Cloud Resume Challenge helped me transition from AWS certifications to hands-on experience in the cloud industry.
+In this final stage, I documented the project and reflected on the practical skills I developed throughout the process. Taking on the Cloud Resume Challenge bridged the gap between theory and hands-on implementation, reinforcing my understanding of core AWS services. By building a fully serverless application from scratch, I gained experience in real-world workflows, troubleshooting cloud components, and designing secure and scalable cloud architectures. This project complemented my certification and strengthened my confidence in working with AWS in a practical setting.
