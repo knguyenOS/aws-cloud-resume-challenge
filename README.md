@@ -51,6 +51,8 @@ Build the visual representation of resume using plain HTML, CSS and JavaScript.
 #### 2.1 HTML/CSS
 The resume website is built using HTML to structure the content and CSS to control the visual presentation. Although the Cloud Resume Challenge does not focus on perfect UI/UX, the site should still look polished and professional. I used a combination of a simple resume template and generative AI assistance to refine the layout, styling, and readability.
 
+> **As of 11/21**: I have decided to begin working on an entire portfolio website which will feature more visually appealing design and visuals rather than what I have currently which is a static document sheet.
+
 #### 2.2 JavaScript
 JavaScript will be used to specifically implement the visitor counter feature. A small script sends a request to the backend API to retrieve and update the number of views stored in DynamoDB. This will demonstrate how the front-end can interact with AWS services using asynchronous HTTP calls. The updated count is then displayed directly on the webpage.
 
@@ -81,7 +83,7 @@ For the database layer, I implemented [DynamoDB](https://aws.amazon.com/dynamodb
 The Lambda function handles two responsibilities:
 - incrementing the counter in DynamoDB
 - returning the updated value to the caller.
-- 
+
 ![DynamoDB](/Assets/DynamoDB.png)
 
 #### 3.2 AWS Lambda
