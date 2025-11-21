@@ -16,13 +16,14 @@ The [Cloud Resume Challenge](https://cloudresumechallenge.dev/) is a hands-on pr
     - [Stage 2 — Front-End Resume Website](#stage-2--front-end-resume-website)
       - [2.1 HTML/CSS](#21-htmlcss)
       - [2.2 JavaScript](#22-javascript)
-      - [2.3 AWS S3](Simple
-      - [2.4 CloudFront](#24-cloudfront)
-      - [2.5 Route53 (DNS)](#25-route53-dns)
+      - [2.3 AWS S3 (Simple Storage Service)](#23-aws-s3-simple-storage-service)
+      - [2.4 AWS CloudFront](#24-aws-cloudfront)
+      - [2.5 AWS Route 53 (DNS)](#25-aws-route-53-dns)
       - [2.6 AWS Certificate Manager (ACM)](#26-aws-certificate-manager-acm)
     - [Stage 3 — Back-End & Database](#stage-3--back-end--database)
-      - [3.1 Database](#31-database)
-      - [3.2 API + Lambda](#32-api--lambda)
+      - [3.1 AWS DynamoDB](#31-aws-dynamodb)
+      - [3.2 AWS Lambda](#32-aws-lambda)
+      - [3.3 AWS API Gateway](#33-aws-api-gateway)
     - [Stage 4 — Frontend & Backend Integration](#stage-4--frontend--backend-integration)
       - [4.1 Dynamic Counter Value](#41-dynamic-counter-value)
     - [Stage 5 — CI/CD Automation](#stage-5--cicd-automation)
@@ -50,12 +51,10 @@ Build the visual representation of resume using plain HTML, CSS and JavaScript.
 #### 2.1 HTML/CSS
 The resume website is built using HTML to structure the content and CSS to control the visual presentation. Although the Cloud Resume Challenge does not focus on perfect UI/UX, the site should still look polished and professional. I used a combination of a simple resume template and generative AI assistance to refine the layout, styling, and readability.
 
-
-
 #### 2.2 JavaScript
 JavaScript will be used to specifically implement the visitor counter feature. A small script sends a request to the backend API to retrieve and update the number of views stored in DynamoDB. This will demonstrate how the front-end can interact with AWS services using asynchronous HTTP calls. The updated count is then displayed directly on the webpage.
 
-#### 2.3 AWS S3 (simple storage service)
+#### 2.3 AWS S3 (Simple Storage Service)
 After completing the website, I stored the files into an S3 bucket which has the ability to host static websites. To make the site publicly accessible, I configure the bucket for public access, added a bucket policy granting read permissions, and enable static website hosting with an index document. Once set up, I was able to access the website via the S3 bucket’s website endpoint.
 
 ![S3](/Assets/S3.png)
@@ -65,26 +64,31 @@ While hosting a static resume website directly from S3 works, it’s considered 
 
 CloudFront generates a unique domain such as `d123abcd89ef0.cloudfront.net`, which can later be replaced with a more human-friendly custom domain name
 
-#### 2.5 AWS Route53 (DNS) & AWS Certificate Manager (ACM)
-To make the resume website accessible through a user-friendly custom domain, I registered the domain through [Route 53](https://aws.amazon.com/route53/) and pointed it to the CloudFront distribution using DNS records. I then used [Certificate Manager](https://aws.amazon.com/certificate-manager/) to issue an SSL/TLS certificate for my domain, enabling secure HTTPS communication. After attaching the certificate to CloudFront, the website could be accessed securely using the custom domain. This completes the front-end hosting setup with proper DNS and encryption.
+#### 2.5 AWS Route 53 (DNS)
+To make the resume website accessible through a user-friendly custom domain, I registered the domain through [Route 53](https://aws.amazon.com/route53/) and pointed it to the CloudFront distribution using DNS records. 
+
+#### 2.6 AWS Certificate Manager (ACM)
+I then used [Certificate Manager](https://aws.amazon.com/certificate-manager/) to issue an SSL/TLS certificate for my domain, enabling secure HTTPS communication. After attaching the certificate to CloudFront, the website could be accessed securely using the custom domain. This completes the front-end hosting setup with proper DNS and encryption.
 
 ![Route53](/Assets/Route53.png)
 
 ### Stage 3 — Back-End & Database
 This section is about extending local visitor counter (written in JavaScript) to a full API which saves the values in AWS DynamoDB database.
 
-#### 3.1 Database + Lambda
-For the database layer, I implemented [DynamoDB](https://aws.amazon.com/dynamodb/) as a highly scalable NoSQL data store to track visitor counts reliably. I created a single table with a partition key representing the counter ID, which allowed for simple lookups and updates. A [Lambda function](https://aws.amazon.com/lambda/) will use DynamoDB’s UpdateItem operation with an increment expression so the counter value is updated safely even under concurrent requests. 
+#### 3.1 AWS DynamoDB
+For the database layer, I implemented [DynamoDB](https://aws.amazon.com/dynamodb/) as a highly scalable NoSQL data store to track visitor counts reliably. I created a single table with a partition key representing the counter ID, which allowed for simple lookups and updates.
 
 The Lambda function handles two responsibilities:
 - incrementing the counter in DynamoDB
 - returning the updated value to the caller.
-
+- 
 ![DynamoDB](/Assets/DynamoDB.png)
 
-#### 3.2 API Gateway
-[API Gateway](https://aws.amazon.com/api-gateway/) was used to expose the Lambda function through a secure, public HTTP API endpoint that the frontend could call. I created a `/visitor-counter` GET route and connected it to the Lambda function using Lambda Proxy Integration, allowing JSON responses to pass through directly. After deploying the API to the `prod` stage, it generated the URL that my JavaScript uses to fetch and update the visitor count. I also enabled CORS and ensured the Lambda execution role had permission to update the DynamoDB table, completing the backend integration.
+#### 3.2 AWS Lambda
+A [Lambda function](https://aws.amazon.com/lambda/) will use DynamoDB’s UpdateItem operation with an increment expression so the counter value is updated safely even under concurrent requests. 
 
+#### 3.3 AWS API Gateway
+[API Gateway](https://aws.amazon.com/api-gateway/) was used to expose the Lambda function through a secure, public HTTP API endpoint that the frontend could call. I created a `/visitor-counter` GET route and connected it to the Lambda function using Lambda Proxy Integration, allowing JSON responses to pass through directly. After deploying the API to the `prod` stage, it generated the URL that my JavaScript uses to fetch and update the visitor count. I also enabled CORS and ensured the Lambda execution role had permission to update the DynamoDB table, completing the backend integration.
 
 ### Stage 4 — Frontend & Backend integration
 This stage brings the backend logic into the user interface, enabling real-time dynamic updates to the resume website.
