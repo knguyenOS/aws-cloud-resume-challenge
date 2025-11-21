@@ -4,7 +4,7 @@
 # Cloud Resume Hosting Project
 This project was developed to further my understanding of cloud concepts upon taking the AWS Cloud Practitioner. See my website [here](http://khangcloud.com)
 
-The [Cloud Resume Challenge](https://cloudresumechallenge.dev/) is a hands-on project designed by [Forrest Brazeal](https://forrestbrazeal.com/) to provide a pathway from obtaining a cloud certification to implementing practical skills in a workcloud job. By deploying your own personal website and utilizing DevOps practices. it gives you hands-on experiences to prepare for a job in the cloud industry. I will be using Amazon Web Services (AWS) to attempt the challenge and document my progress.
+The [Cloud Resume Challenge](https://cloudresumechallenge.dev/) is a hands-on project designed by [Forrest Brazeal](https://forrestbrazeal.com/) to provide a pathway from obtaining a cloud certification to implementing practical skills in a workcloud job. By deploying your own personal website and utilizing DevOps practices, it gives you hands-on experiences to prepare for a job in the cloud industry. I will be using Amazon Web Services (AWS) to attempt the challenge and document my progress.
 
 
 # Table of Contents
@@ -16,7 +16,7 @@ The [Cloud Resume Challenge](https://cloudresumechallenge.dev/) is a hands-on pr
     - [Stage 2 — Front-End Resume Website](#stage-2--front-end-resume-website)
       - [2.1 HTML/CSS](#21-htmlcss)
       - [2.2 JavaScript](#22-javascript)
-      - [2.3 S3](#23-s3)
+      - [2.3 AWS S3](Simple
       - [2.4 CloudFront](#24-cloudfront)
       - [2.5 Route53 (DNS)](#25-route53-dns)
       - [2.6 AWS Certificate Manager (ACM)](#26-aws-certificate-manager-acm)
@@ -38,21 +38,22 @@ The [Cloud Resume Challenge](https://cloudresumechallenge.dev/) is a hands-on pr
 
 ## Challenge Stages
 ### Stage 1 — Foundations
-First challenge is to obtain a certification which ensures you understand cloud fundamentals before continuing. For this project, I worked towards AWS services and so took the [AWS Cloud Practitioner](https://aws.amazon.com/certification/certified-cloud-practitioner/) Certification. [Here](https://www.credly.com/badges/81a987db-7829-4954-88d2-c5cf20330e22/public_url) is my credly badge.
+First challenge is to obtain a certification which ensures you understand cloud fundamentals before continuing. I took the [AWS Cloud Practitioner](https://aws.amazon.com/certification/certified-cloud-practitioner/) Certification. [Here](https://www.credly.com/badges/81a987db-7829-4954-88d2-c5cf20330e22/public_url) is my credly badge.
 
 <p align="center">
   <img src="https://images.credly.com/size/340x340/images/00634f82-b07f-4bbd-a6bb-53de397fc3a6/image.png" width="200">
 </p>
 
-
 ### Stage 2 — Front-End Resume Website
-Build the visual representation of resume using plain HTML, CSS and JavaScript (which gets more important at stage 2).
+Build the visual representation of resume using plain HTML, CSS and JavaScript.
 
 #### 2.1 HTML/CSS
 The resume website is built using HTML to structure the content and CSS to control the visual presentation. Although the Cloud Resume Challenge does not focus on perfect UI/UX, the site should still look polished and professional. I used a combination of a simple resume template and generative AI assistance to refine the layout, styling, and readability.
 
+
+
 #### 2.2 JavaScript
-JavaScript is used to add minimal interactivity to an otherwise static website, specifically for implementing the visitor counter feature. A small script sends a request to the backend API to retrieve and update the number of views stored in DynamoDB. This demonstrates how the front-end can interact with AWS services using asynchronous HTTP calls. The updated count is then displayed directly on the webpage.
+JavaScript will be used to specifically implement the visitor counter feature. A small script sends a request to the backend API to retrieve and update the number of views stored in DynamoDB. This will demonstrate how the front-end can interact with AWS services using asynchronous HTTP calls. The updated count is then displayed directly on the webpage.
 
 #### 2.3 AWS S3 (simple storage service)
 After completing the website, I stored the files into an S3 bucket which has the ability to host static websites. To make the site publicly accessible, I configure the bucket for public access, added a bucket policy granting read permissions, and enable static website hosting with an index document. Once set up, I was able to access the website via the S3 bucket’s website endpoint.
@@ -60,7 +61,7 @@ After completing the website, I stored the files into an S3 bucket which has the
 ![S3](/Assets/S3.png)
 
 #### 2.4 AWS CloudFront
-While hosting a static resume website directly from S3 works, it’s considered less secure as it lacks HTTPS, rovides no layer for protection, and allows outsiders direct access. Instead, we can use [CloudFront with Origin Access Control (OAC)](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html) to make the page only accessible only via CloudFront Distribution link. This allows our S3 to be kept private and secure. This ensures all traffic is routed through CloudFront, where HTTPS is enabled by default. 
+While hosting a static resume website directly from S3 works, it’s considered less secure as it lacks HTTPS, provides no layer for protection, and allows outsiders direct access. Instead, we can use [CloudFront with Origin Access Control (OAC)](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html) to make the page only accessible only via a CloudFront Distribution link. This allows our S3 to be kept private and secure and ensures all traffic is routed through CloudFront, where HTTPS is enabled by default. 
 
 CloudFront generates a unique domain such as `d123abcd89ef0.cloudfront.net`, which can later be replaced with a more human-friendly custom domain name
 
@@ -73,7 +74,7 @@ To make the resume website accessible through a user-friendly custom domain, I r
 This section is about extending local visitor counter (written in JavaScript) to a full API which saves the values in AWS DynamoDB database.
 
 #### 3.1 Database + Lambda
-For the database layer, I implemented [DynamoDB](https://aws.amazon.com/dynamodb/) as a highly scalable NoSQL data store to track visitor counts reliably. I created a single table with a partition key representing the counter ID, which allowed for simple lookups and atomic updates. The [Lambda function](https://aws.amazon.com/lambda/) uses DynamoDB’s UpdateItem operation with an increment expression so the counter value is updated safely even under concurrent requests. 
+For the database layer, I implemented [DynamoDB](https://aws.amazon.com/dynamodb/) as a highly scalable NoSQL data store to track visitor counts reliably. I created a single table with a partition key representing the counter ID, which allowed for simple lookups and updates. A [Lambda function](https://aws.amazon.com/lambda/) will use DynamoDB’s UpdateItem operation with an increment expression so the counter value is updated safely even under concurrent requests. 
 
 The Lambda function handles two responsibilities:
 - incrementing the counter in DynamoDB
@@ -82,7 +83,7 @@ The Lambda function handles two responsibilities:
 ![DynamoDB](/Assets/DynamoDB.png)
 
 #### 3.2 API Gateway
-[API Gateway](https://aws.amazon.com/api-gateway/) was used to expose the Lambda function through a secure, public REST API endpoint that the frontend could call. I created a `/visitor-counter` GET route and connected it to the Lambda function using Lambda Proxy Integration, allowing JSON responses to pass through directly. After deploying the API to the `prod` stage, it generated the URL that my JavaScript uses to fetch and update the visitor count. I also enabled CORS and ensured the Lambda execution role had permission to update the DynamoDB table, completing the backend integration.
+[API Gateway](https://aws.amazon.com/api-gateway/) was used to expose the Lambda function through a secure, public HTTP API endpoint that the frontend could call. I created a `/visitor-counter` GET route and connected it to the Lambda function using Lambda Proxy Integration, allowing JSON responses to pass through directly. After deploying the API to the `prod` stage, it generated the URL that my JavaScript uses to fetch and update the visitor count. I also enabled CORS and ensured the Lambda execution role had permission to update the DynamoDB table, completing the backend integration.
 
 
 ### Stage 4 — Frontend & Backend integration
@@ -124,4 +125,4 @@ For the backend, I configured [CodePipeline](https://aws.amazon.com/codepipeline
 ![CodePipeline](/Assets/CICD-Pipeline.png)
 
 ### Stage 6 — Reflection & Documentation
-In this final stage, I documented the project and reflected on the practical skills I developed throughout the process. Taking on the Cloud Resume Challenge bridged the gap between theory and hands-on implementation, reinforcing my understanding of core AWS services. By building a fully serverless application from scratch, I gained experience in real-world workflows, troubleshooting cloud components, and designing secure and scalable cloud architectures. This project complemented my certification and strengthened my confidence in working with AWS in a practical setting.
+Taking on the Cloud Resume Challenge gave me valuable hands-on experience which reinforced my understanding of AWS services. By building a fully serverless application from scratch, I gained experience in workflows, troubleshootings, and designing of secure and scalable architectures. This project very fun to work on and complemented well with the certification gained. I hope to further this knowledge by continuing to work on personal projects.
