@@ -60,25 +60,30 @@ After completing the website, I stored the files into an S3 bucket which has the
 ![S3](/Assets/S3.png)
 
 #### 2.4 AWS CloudFront
-While hosting a static resume website directly from S3 works, it’s considered less secure as it lacks HTTPS, rovides no layer for protection, and allows outsiders direct access. Instead, we can use CloudFront with Origin Access Control (OAC) to make the page only accessible only via CloudFront Distribution link. This allows our S3 to be kept private and secure. This ensures all traffic is routed through CloudFront, where HTTPS is enabled by default. 
+While hosting a static resume website directly from S3 works, it’s considered less secure as it lacks HTTPS, rovides no layer for protection, and allows outsiders direct access. Instead, we can use [CloudFront with Origin Access Control (OAC)](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html) to make the page only accessible only via CloudFront Distribution link. This allows our S3 to be kept private and secure. This ensures all traffic is routed through CloudFront, where HTTPS is enabled by default. 
 
-CloudFront generates a unique domain such as ```d123abcd89ef0.cloudfront.net```, which can later be replaced with a more human-friendly custom domain name
+CloudFront generates a unique domain such as `d123abcd89ef0.cloudfront.net`, which can later be replaced with a more human-friendly custom domain name
 
 #### 2.5 AWS Route53 (DNS) & AWS Certificate Manager (ACM)
-To make the resume website accessible through a user-friendly custom domain, I registered the domain through Route 53 and pointed it to the CloudFront distribution using DNS records. I then used AWS Certificate Manager to issue an SSL/TLS certificate for my domain, enabling secure HTTPS communication. After attaching the certificate to CloudFront, the website could be accessed securely using the custom domain. This completes the front-end hosting setup with proper DNS and encryption.
+To make the resume website accessible through a user-friendly custom domain, I registered the domain through [Route 53](https://aws.amazon.com/route53/) and pointed it to the CloudFront distribution using DNS records. I then used [Certificate Manager](https://aws.amazon.com/certificate-manager/) to issue an SSL/TLS certificate for my domain, enabling secure HTTPS communication. After attaching the certificate to CloudFront, the website could be accessed securely using the custom domain. This completes the front-end hosting setup with proper DNS and encryption.
 
 ![Route53](/Assets/Route53.png)
 
 ### Stage 3 — Back-End & Database
 This section is about extending local visitor counter (written in JavaScript) to a full API which saves the values in AWS DynamoDB database.
 
-#### 3.1 Database
-For the database layer, I implemented Amazon DynamoDB as a highly scalable NoSQL data store to track visitor counts reliably. I created a single table with a partition key representing the counter ID, which allowed for simple lookups and atomic updates. The Lambda function uses DynamoDB’s UpdateItem operation with an increment expression so the counter value is updated safely even under concurrent requests. This serverless design eliminates the need for managing servers while ensuring low latency and high availability.
+#### 3.1 Database + Lambda
+For the database layer, I implemented [DynamoDB](https://aws.amazon.com/dynamodb/) as a highly scalable NoSQL data store to track visitor counts reliably. I created a single table with a partition key representing the counter ID, which allowed for simple lookups and atomic updates. The [Lambda function](https://aws.amazon.com/lambda/) uses DynamoDB’s UpdateItem operation with an increment expression so the counter value is updated safely even under concurrent requests. 
+
+The Lambda function handles two responsibilities:
+- incrementing the counter in DynamoDB
+- returning the updated value to the caller.
 
 ![DynamoDB](/Assets/DynamoDB.png)
 
-#### 3.2 API + Lambda
-The API layer was built using AWS Lambda with Python and the boto3 SDK. The Lambda function handles two responsibilities: incrementing the counter in DynamoDB and returning the updated value to the caller. The function is then exposed through API Gateway so the frontend can call it securely.
+#### 3.2 API Gateway
+[API Gateway](https://aws.amazon.com/api-gateway/) was used to expose the Lambda function through a secure, public REST API endpoint that the frontend could call. I created a `/visitor-counter` GET route and connected it to the Lambda function using Lambda Proxy Integration, allowing JSON responses to pass through directly. After deploying the API to the `prod` stage, it generated the URL that my JavaScript uses to fetch and update the visitor count. I also enabled CORS and ensured the Lambda execution role had permission to update the DynamoDB table, completing the backend integration.
+
 
 ### Stage 4 — Frontend & Backend integration
 This stage brings the backend logic into the user interface, enabling real-time dynamic updates to the resume website.
@@ -114,7 +119,7 @@ The frontend JavaScript was modified to fetch the visitor count directly from th
 This stage automates deployments for both backend and frontend, eliminating manual uploads and ensuring consistent, repeatable updates.
 
 #### 5.1 CodePipeline CI/CD (Backend)
-For the backend, I configured AWS CodePipeline to automatically detect changes pushed to GitHub using the AWS Connector for GitHub. This integration allows CodePipeline to monitor the repository and trigger builds whenever new commits are pushed. CodeBuild handles running the tests and packaging the Lambda code, while the final stage deploys the updated function automatically. This workflow ensures that every backend update is tested, validated, and deployed with no manual intervention, improving reliability and speeding up development.
+For the backend, I configured [CodePipeline](https://aws.amazon.com/codepipeline/) to automatically detect changes pushed to GitHub using the [AWS Connector for GitHub](https://github.com/marketplace/aws-connector-for-github). This integration allows CodePipeline to monitor the repository and trigger builds whenever new commits are pushed. CodeBuild handles running the tests and packaging the Lambda code, while the final stage deploys the updated function automatically. This workflow ensures that every backend update is tested, validated, and deployed with no manual intervention, improving reliability and speeding up development.
 
 ![CodePipeline](/Assets/CICD-Pipeline.png)
 
