@@ -40,9 +40,10 @@ The [Cloud Resume Challenge](https://cloudresumechallenge.dev/) is a hands-on pr
 ### Stage 1 — Foundations
 First challenge is to obtain a certification which ensures you understand cloud fundamentals before continuing. For this project, I worked towards AWS services and so took the [AWS Cloud Practitioner](https://aws.amazon.com/certification/certified-cloud-practitioner/) Certification. [Here](https://www.credly.com/badges/81a987db-7829-4954-88d2-c5cf20330e22/public_url) is my credly badge.
 
-<div style="text-align:center">
-  <img src="https://images.credly.com/size/340x340/images/00634f82-b07f-4bbd-a6bb-53de397fc3a6/image.png" width=200>
-</div>
+<p align="center">
+  <img src="https://images.credly.com/size/340x340/images/00634f82-b07f-4bbd-a6bb-53de397fc3a6/image.png" width="200">
+</p>
+
 
 ### Stage 2 — Front-End Resume Website
 Build the visual representation of resume using plain HTML, CSS and JavaScript (which gets more important at stage 2).
